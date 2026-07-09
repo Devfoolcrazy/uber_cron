@@ -1,0 +1,8 @@
+@reboot /usr/local/bin/au-demarrage
+@daily /usr/local/bin/quotidien --avec "des  espaces"
+@bogus ceci n'est pas un raccourci valide
+	 0  9	* * 1	  /usr/bin/tabs-et-espaces   --arg  'gardés  tels quels'
+0 9 * * 1
+ligne totalement invalide !!!
+FOO_BAR=valeur=avec=égals
+5 5 5 5 fri echo vendredi 5 mai à 05:05

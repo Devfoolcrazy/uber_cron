@@ -1,0 +1,10 @@
+# name: Sauvegarde hebdo
+0 3 * * 0 /usr/local/bin/backup --full
+
+# name: Nettoyage désactivé
+# UBERCRON-DISABLED: 0 4 * * * /usr/local/bin/cleanup
+
+# UBERCRON-DISABLED: */10 9-18 * * 1-5 /usr/local/bin/poll
+# name: Orphelin sans job juste après
+
+15 6 * * * /usr/bin/uptime >> ~/uptime.log

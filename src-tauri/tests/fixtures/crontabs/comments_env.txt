@@ -1,0 +1,9 @@
+# crontab de démonstration
+SHELL=/bin/zsh
+PATH = /opt/homebrew/bin:/usr/bin:/bin
+MAILTO=""
+
+# un job commenté à la main (doit rester un commentaire)
+#0 9 * * 1 /usr/bin/vieux-backup.sh
+
+0 22 * * * /usr/bin/find /tmp -name '*.tmp' -delete
