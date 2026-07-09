@@ -9,6 +9,8 @@ import {
 } from "../lib/bindings";
 import { formatRun, humanizeCron, isReboot } from "../lib/schedule";
 import { apiErrorMessage } from "../App";
+import CronFieldRow, { type CronFieldKey } from "../components/CronFieldRow";
+import CronHelp from "../components/CronHelp";
 
 type Props = {
   backend: BackendKind;
@@ -25,7 +27,8 @@ const PRESETS = [
   { key: "monthly", expr: "0 9 1 * *" },
 ] as const;
 
-const FIELD_KEYS = ["minute", "hour", "day", "month", "weekday"] as const;
+const FIELD_KEYS: readonly CronFieldKey[] = ["minute", "hour", "day", "month", "weekday"];
+const NO_CUSTOM = [false, false, false, false, false];
 
 /** Découpe une expression 5 champs ; null si ce n'en est pas une (@raccourci…). */
 function splitFields(expr: string): string[] | null {
@@ -43,6 +46,8 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
   const [preview, setPreview] = useState<SchedulePreview | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
+  // Champs passés explicitement en mode « personnalisé » (pas d'auto-redérivation).
+  const [customFields, setCustomFields] = useState<boolean[]>(NO_CUSTOM);
 
   const fields = splitFields(expression);
 
@@ -135,6 +140,7 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
                   onClick={() => {
                     setExpression(preset.expr);
                     setFreeMode(false);
+                    setCustomFields(NO_CUSTOM);
                   }}
                 >
                   {t(`editor.presets.${preset.key}`)}
@@ -161,22 +167,31 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
                 />
               </label>
             ) : (
-              <div className="cron-fields">
+              <div className="cron-rows">
                 {FIELD_KEYS.map((key, index) => (
-                  <label key={key} className="cron-field">
-                    <input
-                      className="mono"
-                      type="text"
-                      value={fields[index]}
-                      onChange={(e) => setField(index, e.target.value)}
-                      spellCheck={false}
-                      aria-label={t(`editor.fields.${key}`)}
-                    />
-                    <span>{t(`editor.fields.${key}`)}</span>
-                  </label>
+                  <CronFieldRow
+                    key={key}
+                    fieldKey={key}
+                    part={fields[index]}
+                    customSticky={customFields[index]}
+                    onChange={(part, sticky) => {
+                      setField(index, part);
+                      setCustomFields((current) =>
+                        current.map((c, i) => (i === index ? sticky : c)),
+                      );
+                    }}
+                  />
                 ))}
               </div>
             )}
+
+            <CronHelp
+              onUse={(expr) => {
+                setExpression(expr);
+                setFreeMode(false);
+                setCustomFields(NO_CUSTOM);
+              }}
+            />
           </fieldset>
 
           <label className="field">

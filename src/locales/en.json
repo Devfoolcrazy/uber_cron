@@ -71,6 +71,27 @@
     },
     "freeMode": "Free expression",
     "builderMode": "Builder",
+    "mode": {
+      "every": "every (*)",
+      "step": "every N",
+      "exact": "exact value",
+      "weekdays": "weekdays (Mon-Fri)",
+      "weekend": "weekend",
+      "custom": "custom…"
+    },
+    "help": {
+      "toggle": "Help & examples",
+      "syntaxTitle": "The 5 fields",
+      "operatorsTitle": "Operators",
+      "weekdayNote": "Weekday: 0 and 7 both mean Sunday.",
+      "op": {
+        "star": "any value",
+        "comma": "list of values — 1,15",
+        "dash": "range — 8-18",
+        "slash": "step — */5 = every 5"
+      },
+      "examplesTitle": "Examples — click to use"
+    },
     "expression": "Cron expression",
     "command": "Command",
     "commandPlaceholder": "/usr/local/bin/my-script --option",

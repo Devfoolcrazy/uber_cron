@@ -71,6 +71,27 @@
     },
     "freeMode": "Expression libre",
     "builderMode": "Assistant",
+    "mode": {
+      "every": "chaque (*)",
+      "step": "toutes les N",
+      "exact": "valeur précise",
+      "weekdays": "jours ouvrés (lun-ven)",
+      "weekend": "week-end",
+      "custom": "personnalisé…"
+    },
+    "help": {
+      "toggle": "Aide & exemples",
+      "syntaxTitle": "Les 5 champs",
+      "operatorsTitle": "Opérateurs",
+      "weekdayNote": "Jour de semaine : 0 et 7 valent tous deux dimanche.",
+      "op": {
+        "star": "n'importe quelle valeur",
+        "comma": "liste de valeurs — 1,15",
+        "dash": "plage — 8-18",
+        "slash": "pas — */5 = toutes les 5"
+      },
+      "examplesTitle": "Exemples — cliquez pour utiliser"
+    },
     "expression": "Expression cron",
     "command": "Commande",
     "commandPlaceholder": "/usr/local/bin/mon-script --option",
