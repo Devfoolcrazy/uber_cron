@@ -92,6 +92,24 @@
       },
       "examplesTitle": "Examples — click to use"
     },
+    "cmdHelp": {
+      "tipsTitle": "Good habits",
+      "tips": {
+        "absolute": "cron only knows /usr/bin and /bin: give the absolute path of your programs. To find it, type \"which python3\" (or node, brew…) in Terminal.",
+        "venv": "Python + venv: no need to activate — run its interpreter directly (venv/bin/python script.py).",
+        "workdir": "The \"Working directory\" field replaces a manual cd: your relative paths (script, data files) become valid.",
+        "log": "Always add a log: it's your only way to understand why a task failed at 4 AM.",
+        "test": "Test your command with \"Run now\" from the list before trusting the schedule."
+      },
+      "examples": {
+        "shell": { "label": "Shell script", "desc": "your own .sh, made executable (chmod +x)" },
+        "python": { "label": "Python script with venv", "desc": "the venv's interpreter, paths relative to the project" },
+        "node": { "label": "Node.js script", "desc": "Homebrew-installed node" },
+        "rsync": { "label": "Folder backup", "desc": "incremental copy to an external drive" },
+        "cleanup": { "label": "Automatic cleanup", "desc": "delete .dmg files older than 30 days" },
+        "curl": { "label": "Call a URL", "desc": "ping, webhook, healthcheck…" }
+      }
+    },
     "expression": "Cron expression",
     "command": "Command",
     "commandPlaceholder": "/usr/local/bin/my-script --option",

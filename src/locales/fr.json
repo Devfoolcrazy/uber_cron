@@ -92,6 +92,24 @@
       },
       "examplesTitle": "Exemples — cliquez pour utiliser"
     },
+    "cmdHelp": {
+      "tipsTitle": "Les bons réflexes",
+      "tips": {
+        "absolute": "cron ne connaît que /usr/bin et /bin : donnez le chemin absolu de vos programmes. Pour le trouver, tapez « which python3 » (ou node, brew…) dans le Terminal.",
+        "venv": "Python + venv : inutile d'activer l'environnement — lancez directement son interpréteur (venv/bin/python script.py).",
+        "workdir": "Le champ « Dossier de travail » remplace le cd manuel : vos chemins relatifs (script, fichiers de données) deviennent valides.",
+        "log": "Ajoutez toujours un journal : c'est votre seul moyen de comprendre pourquoi une tâche a échoué à 4 h du matin.",
+        "test": "Testez votre commande avec « Exécuter maintenant » depuis la liste avant de faire confiance à la planification."
+      },
+      "examples": {
+        "shell": { "label": "Script shell", "desc": "un .sh à vous, rendu exécutable (chmod +x)" },
+        "python": { "label": "Script Python avec venv", "desc": "l'interpréteur du venv, chemins relatifs au projet" },
+        "node": { "label": "Script Node.js", "desc": "node installé par Homebrew" },
+        "rsync": { "label": "Sauvegarde d'un dossier", "desc": "copie incrémentale vers un disque externe" },
+        "cleanup": { "label": "Nettoyage automatique", "desc": "supprimer les .dmg de plus de 30 jours" },
+        "curl": { "label": "Appeler une URL", "desc": "ping, webhook, healthcheck…" }
+      }
+    },
     "expression": "Expression cron",
     "command": "Commande",
     "commandPlaceholder": "/usr/local/bin/mon-script --option",

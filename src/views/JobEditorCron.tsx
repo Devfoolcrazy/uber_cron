@@ -9,6 +9,7 @@ import {
 } from "../lib/bindings";
 import { formatRun, humanizeCron, isReboot } from "../lib/schedule";
 import { apiErrorMessage } from "../App";
+import CommandHelp from "../components/CommandHelp";
 import CronFieldRow, { type CronFieldKey } from "../components/CronFieldRow";
 import CronHelp from "../components/CronHelp";
 import {
@@ -283,6 +284,8 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
                 <code className="generated-line">{composed}</code>
               </p>
             )}
+
+          <CommandHelp onUse={setCmdParts} />
 
           <div className="editor-actions">
             <button type="button" className="btn" onClick={onCancel}>
