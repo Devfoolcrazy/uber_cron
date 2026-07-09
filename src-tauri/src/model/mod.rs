@@ -49,7 +49,7 @@ pub enum ScheduleInfo {
     CronExpr(String),
     CalendarIntervals(Vec<CalendarEntry>),
     /// StartInterval en secondes.
-    Interval(u64),
+    Interval(u32),
 }
 
 /// Modèle commun en lecture (§3.1).
@@ -102,7 +102,7 @@ pub enum LaunchdCommand {
 #[serde(tag = "type", content = "value", rename_all = "camelCase")]
 pub enum LaunchdSchedule {
     CalendarIntervals(Vec<CalendarEntry>),
-    Interval(u64),
+    Interval(u32),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]

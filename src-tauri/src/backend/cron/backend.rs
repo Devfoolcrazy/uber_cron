@@ -9,6 +9,7 @@ use std::sync::Arc;
 
 use sha2::{Digest, Sha256};
 
+use crate::backend::cron::occurrence;
 use crate::backend::cron::parser::{canonicalize_job_parts, Crontab, CrontabLine};
 use crate::backend::{BackendError, SchedulerBackend};
 use crate::model::{
@@ -158,7 +159,7 @@ impl CronBackend {
             schedule: ScheduleInfo::CronExpr(schedule.clone()),
             schedule_raw: schedule.clone(),
             enabled,
-            next_runs: Vec::new(), // rempli à l'étape 5 (croner)
+            next_runs: occurrence::next_runs_rfc3339(schedule, 5),
             status: JobStatus::Static,
             last_exit_code: None,
             managed: true,
@@ -184,6 +185,12 @@ impl CronBackend {
             .ok_or_else(|| {
                 BackendError::InvalidSpec("expression ou commande invalide".to_string())
             })?;
+        // Validation sémantique (plages de valeurs) par croner, en plus de la forme.
+        if !occurrence::is_valid(&schedule) {
+            return Err(BackendError::InvalidSpec(format!(
+                "expression cron invalide : {schedule}"
+            )));
+        }
         Ok((schedule, command, name))
     }
 }
