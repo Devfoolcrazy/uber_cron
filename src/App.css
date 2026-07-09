@@ -208,6 +208,7 @@ pre,
 .content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 14px;
 }
 
@@ -491,6 +492,7 @@ pre,
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
 .field {
@@ -500,6 +502,10 @@ pre,
   border: 0;
   padding: 0;
   margin: 0;
+  /* Un fieldset a min-inline-size: min-content par défaut : sans ceci, les
+     5 inputs du builder imposent leur largeur intrinsèque et tout déborde. */
+  min-inline-size: 0;
+  min-width: 0;
 }
 
 .field-label {
@@ -522,6 +528,10 @@ input[type="text"] {
   background: var(--bg);
   color: var(--text);
   user-select: text;
+  /* Neutraliser la largeur intrinsèque (size) des inputs : c'est le layout
+     qui décide, jamais le contenu. */
+  width: 100%;
+  min-width: 0;
 }
 
 input[type="text"].mono {
@@ -564,7 +574,7 @@ input[type="text"]:focus {
 
 .cron-fields {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 6px;
 }
 

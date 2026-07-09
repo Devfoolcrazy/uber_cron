@@ -69,7 +69,10 @@ export type DiagnosticSeverity = "ok" | "warning" | "error";
 export type Job = {
 	id: string,
 	backend: BackendKind,
+	/**  Nom d'affichage : name s'il existe, sinon commande tronquée. */
 	label: string,
+	/**  Nom explicite (cron : commentaire `# name:`) — None si absent. */
+	name: string | null,
 	command: string,
 	schedule: ScheduleInfo,
 	scheduleRaw: string,

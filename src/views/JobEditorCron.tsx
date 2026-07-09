@@ -38,7 +38,7 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
   const initialExpr = job?.scheduleRaw ?? "0 9 * * 1";
   const [expression, setExpression] = useState(initialExpr);
   const [freeMode, setFreeMode] = useState(splitFields(initialExpr) === null);
-  const [name, setName] = useState(job?.label && job.label !== job.command ? job.label : "");
+  const [name, setName] = useState(job?.name ?? "");
   const [command, setCommand] = useState(job?.command ?? "");
   const [preview, setPreview] = useState<SchedulePreview | null>(null);
   const [saving, setSaving] = useState(false);

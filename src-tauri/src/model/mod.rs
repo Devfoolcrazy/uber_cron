@@ -58,7 +58,10 @@ pub enum ScheduleInfo {
 pub struct Job {
     pub id: JobId,
     pub backend: BackendKind,
+    /// Nom d'affichage : name s'il existe, sinon commande tronquée.
     pub label: String,
+    /// Nom explicite (cron : commentaire `# name:`) — None si absent.
+    pub name: Option<String>,
     pub command: String,
     pub schedule: ScheduleInfo,
     pub schedule_raw: String,

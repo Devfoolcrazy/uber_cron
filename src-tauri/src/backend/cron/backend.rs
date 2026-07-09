@@ -155,6 +155,7 @@ impl CronBackend {
             id: Self::make_id(snapshot, index, line),
             backend: BackendKind::Cron,
             label,
+            name: name.clone(),
             command: command.clone(),
             schedule: ScheduleInfo::CronExpr(schedule.clone()),
             schedule_raw: schedule.clone(),
