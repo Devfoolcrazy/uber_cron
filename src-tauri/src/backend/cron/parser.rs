@@ -151,6 +151,159 @@ impl Crontab {
     }
 }
 
+/// Mutations d'édition (§5.2). Seules les lignes créées/éditées sont reformatées
+/// (format canonique) — tout le reste garde son `raw`.
+impl Crontab {
+    fn canonical_job(schedule: &str, command: &str, name: Option<&str>) -> CrontabLine {
+        CrontabLine::Job {
+            schedule: schedule.to_string(),
+            command: command.to_string(),
+            name: name.map(str::to_string),
+            name_raw: name.map(|n| format!("# name: {n}")),
+            raw: format!("{schedule} {command}"),
+        }
+    }
+
+    pub fn push_job(&mut self, schedule: &str, command: &str, name: Option<&str>) {
+        self.lines
+            .push(Self::canonical_job(schedule, command, name));
+        // Une crontab éditée se termine toujours par un newline.
+        self.trailing_newline = true;
+    }
+
+    /// Remplace le job à `index`. Erreur si la ligne n'est pas un job.
+    pub fn replace_job(
+        &mut self,
+        index: usize,
+        schedule: &str,
+        command: &str,
+        name: Option<&str>,
+    ) -> Option<()> {
+        let slot = self.lines.get_mut(index)?;
+        match slot {
+            CrontabLine::Job { .. } => {
+                *slot = Self::canonical_job(schedule, command, name);
+                self.trailing_newline = true;
+                Some(())
+            }
+            CrontabLine::DisabledJob { .. } => {
+                // Un job édité pendant qu'il est désactivé reste désactivé.
+                let enabled = Self::canonical_job(schedule, command, name);
+                if let CrontabLine::Job {
+                    schedule: s,
+                    command: c,
+                    name: n,
+                    name_raw,
+                    raw,
+                } = enabled
+                {
+                    *slot = CrontabLine::DisabledJob {
+                        schedule: s,
+                        command: c,
+                        name: n,
+                        name_raw,
+                        raw: format!("{DISABLED_MARKER}{raw}"),
+                    };
+                }
+                self.trailing_newline = true;
+                Some(())
+            }
+            _ => None,
+        }
+    }
+
+    pub fn remove_job(&mut self, index: usize) -> Option<()> {
+        match self.lines.get(index) {
+            Some(CrontabLine::Job { .. }) | Some(CrontabLine::DisabledJob { .. }) => {
+                self.lines.remove(index);
+                Some(())
+            }
+            _ => None,
+        }
+    }
+
+    /// Active/désactive par préfixe marqueur (§5.3). Round-trip exact : réactiver
+    /// restitue le `raw` d'origine à l'octet près.
+    pub fn set_job_disabled(&mut self, index: usize, disabled: bool) -> Option<()> {
+        let slot = self.lines.get_mut(index)?;
+        match (&*slot, disabled) {
+            (CrontabLine::Job { .. }, true) => {
+                if let CrontabLine::Job {
+                    schedule,
+                    command,
+                    name,
+                    name_raw,
+                    raw,
+                } = slot.clone()
+                {
+                    *slot = CrontabLine::DisabledJob {
+                        schedule,
+                        command,
+                        name,
+                        name_raw,
+                        raw: format!("{DISABLED_MARKER}{raw}"),
+                    };
+                }
+                Some(())
+            }
+            (CrontabLine::DisabledJob { .. }, false) => {
+                if let CrontabLine::DisabledJob {
+                    schedule,
+                    command,
+                    name,
+                    name_raw,
+                    raw,
+                } = slot.clone()
+                {
+                    *slot = CrontabLine::Job {
+                        schedule,
+                        command,
+                        name,
+                        name_raw,
+                        raw: raw
+                            .strip_prefix(DISABLED_MARKER)
+                            .unwrap_or(&raw)
+                            .to_string(),
+                    };
+                }
+                Some(())
+            }
+            // Déjà dans l'état demandé : no-op.
+            (CrontabLine::Job { .. }, false) | (CrontabLine::DisabledJob { .. }, true) => Some(()),
+            _ => None,
+        }
+    }
+}
+
+/// Canonicalise un couple (schedule, commande) destiné à l'écriture :
+/// - rejette tout newline (injection de lignes dans la crontab) ;
+/// - normalise l'espacement du schedule ;
+/// - réinterprète la ligne canonique et exige que le schedule reparsé soit
+///   identique (pas de champ excédentaire avalé par la commande).
+pub fn canonicalize_job_parts(
+    schedule: &str,
+    command: &str,
+    name: Option<&str>,
+) -> Option<(String, String)> {
+    if schedule.contains('\n') || command.contains('\n') || name.is_some_and(|n| n.contains('\n'))
+    {
+        return None;
+    }
+    let schedule = schedule
+        .split_ascii_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ");
+    let command = command.trim();
+    if schedule.is_empty() || command.is_empty() {
+        return None;
+    }
+    let (s, c) = parse_job_line(&format!("{schedule} {command}"))?;
+    if s != schedule {
+        return None;
+    }
+    Some((s, c))
+}
+
 fn classify(raw: &str) -> CrontabLine {
     let raw_string = raw.to_string();
     let trimmed = raw.trim();
