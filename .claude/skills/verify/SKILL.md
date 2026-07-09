@@ -8,10 +8,12 @@ description: Vérifier UberCron en conditions réelles — lancer l'app Tauri en
 ## Lancer
 
 ```sh
-# node via nvm (le lazy-loader nvm du profil zsh est cassé : PATH explicite)
-export PATH="$HOME/.nvm/versions/node/v24.13.0/bin:$PATH"
 npm run tauri dev   # en arrière-plan ; fenêtre "ubercron" up en ~10 s (pgrep -x ubercron)
 ```
+
+Si `npm`/`node` échoue avec `_load_nvm` introuvable (vieux snapshot de shell),
+contourner avec : `export PATH="$HOME/.nvm/versions/node/v24.13.0/bin:$PATH"`.
+Le lazy-loader nvm du `.zshrc` a été corrigé le 2026-07-09 (wrappers autonomes).
 
 ## Observer et piloter (sans Screen Recording)
 
