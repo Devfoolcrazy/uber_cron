@@ -121,6 +121,7 @@ pub struct LaunchdJobSpec {
 #[serde(tag = "type", content = "value", rename_all = "camelCase")]
 pub enum RunResult {
     /// cron : exécution directe terminée.
+    #[serde(rename_all = "camelCase")]
     Completed {
         exit_code: i32,
         stdout_tail: String,

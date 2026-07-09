@@ -15,6 +15,111 @@
     "delete": "Delete",
     "edit": "Edit",
     "close": "Close",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "header": {
+    "newJob": "New job",
+    "diagnostics": "Diagnostics",
+    "reload": "Reload list"
+  },
+  "list": {
+    "emptyTitle": "No scheduled tasks",
+    "emptyBody": "Your crontab is empty. Create your first task: the system's cron will run it even when UberCron is closed.",
+    "emptyCta": "Create a task",
+    "errorTitle": "Could not read the crontab",
+    "count_one": "{{count}} task",
+    "count_other": "{{count}} tasks"
+  },
+  "job": {
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "nextRun": "Next: {{when}}",
+    "noNextRun": "No computable occurrence",
+    "atReboot": "At system startup",
+    "invalidExpr": "Unrecognized expression",
+    "deleteConfirm": "Delete this task?"
+  },
+  "actions": {
+    "run": "Run now",
+    "edit": "Edit",
+    "delete": "Delete",
+    "enable": "Enable",
+    "disable": "Disable"
+  },
+  "editor": {
+    "titleNew": "New cron task",
+    "titleEdit": "Edit task",
+    "name": "Name",
+    "nameOptional": "optional",
+    "namePlaceholder": "Weekly backup",
+    "schedule": "Schedule",
+    "presets": {
+      "everyMinute": "Every minute",
+      "hourly": "Hourly",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly"
+    },
+    "fields": {
+      "minute": "minute",
+      "hour": "hour",
+      "day": "day",
+      "month": "month",
+      "weekday": "weekday"
+    },
+    "freeMode": "Free expression",
+    "builderMode": "Builder",
+    "expression": "Cron expression",
+    "command": "Command",
+    "commandPlaceholder": "/usr/local/bin/my-script --option",
+    "pathWarning": "cron runs with a minimal PATH: use an absolute path (starting with / or ~).",
+    "preview": "Preview",
+    "previewInvalid": "Invalid expression",
+    "nextRunsTitle": "Upcoming runs",
+    "saveCreate": "Create task",
+    "saveEdit": "Save"
+  },
+  "run": {
+    "running": "Running…",
+    "exitOk": "Success · code 0",
+    "exitFail": "Failed · code {{code}}",
+    "stdout": "Standard output",
+    "stderr": "Error output",
+    "empty": "(no output)",
+    "envNote": "Executed with UberCron's environment: the result may differ from a real cron run (minimal PATH)."
+  },
+  "diag": {
+    "title": "Diagnostics",
+    "cron": {
+      "crontabAccessible": {
+        "title": "Crontab accessible",
+        "body": "The crontab command responds normally."
+      },
+      "crontabInaccessible": {
+        "title": "Crontab inaccessible",
+        "body": "The crontab command failed. Details below."
+      },
+      "fullDiskAccess": {
+        "title": "Full Disk Access",
+        "body": "If your tasks read Documents, Desktop or Downloads, add /usr/sbin/cron in System Settings → Privacy & Security → Full Disk Access. Otherwise macOS silently blocks access to those folders."
+      },
+      "minimalPath": {
+        "title": "Minimal PATH",
+        "body": "cron runs commands with a reduced PATH (/usr/bin:/bin). Use absolute paths in your commands, or set PATH= at the top of your crontab."
+      }
+    }
+  },
+  "errors": {
+    "notFound": "Task not found. The list may have changed: reload.",
+    "concurrentModification": "The crontab was modified by another program since it was loaded. Reload the list and try again.",
+    "parseError": "Unparseable crontab line.",
+    "commandFailed": "A system command failed.",
+    "permissionDenied": "Permission denied by the system.",
+    "invalidSpec": "Invalid expression or command.",
+    "io": "Input/output error.",
+    "notImplemented": "Not available in this version.",
+    "unknown": "Unexpected error."
   }
 }

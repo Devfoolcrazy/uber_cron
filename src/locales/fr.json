@@ -15,6 +15,111 @@
     "delete": "Supprimer",
     "edit": "Modifier",
     "close": "Fermer",
-    "confirm": "Confirmer"
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "header": {
+    "newJob": "Nouveau job",
+    "diagnostics": "Diagnostics",
+    "reload": "Recharger la liste"
+  },
+  "list": {
+    "emptyTitle": "Aucune tâche planifiée",
+    "emptyBody": "Votre crontab est vide. Créez votre première tâche : elle sera exécutée par le cron du système, même quand UberCron est fermé.",
+    "emptyCta": "Créer une tâche",
+    "errorTitle": "Impossible de lire la crontab",
+    "count_one": "{{count}} tâche",
+    "count_other": "{{count}} tâches"
+  },
+  "job": {
+    "enabled": "Active",
+    "disabled": "Désactivée",
+    "nextRun": "Prochaine : {{when}}",
+    "noNextRun": "Pas d'occurrence calculable",
+    "atReboot": "Au démarrage du système",
+    "invalidExpr": "Expression non reconnue",
+    "deleteConfirm": "Supprimer cette tâche ?"
+  },
+  "actions": {
+    "run": "Exécuter maintenant",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "enable": "Activer",
+    "disable": "Désactiver"
+  },
+  "editor": {
+    "titleNew": "Nouvelle tâche cron",
+    "titleEdit": "Modifier la tâche",
+    "name": "Nom",
+    "nameOptional": "optionnel",
+    "namePlaceholder": "Sauvegarde hebdo",
+    "schedule": "Planification",
+    "presets": {
+      "everyMinute": "Chaque minute",
+      "hourly": "Chaque heure",
+      "daily": "Chaque jour",
+      "weekly": "Chaque semaine",
+      "monthly": "Chaque mois"
+    },
+    "fields": {
+      "minute": "minute",
+      "hour": "heure",
+      "day": "jour",
+      "month": "mois",
+      "weekday": "jour sem."
+    },
+    "freeMode": "Expression libre",
+    "builderMode": "Assistant",
+    "expression": "Expression cron",
+    "command": "Commande",
+    "commandPlaceholder": "/usr/local/bin/mon-script --option",
+    "pathWarning": "cron exécute avec un PATH minimal : utilisez un chemin absolu (commençant par / ou ~).",
+    "preview": "Aperçu",
+    "previewInvalid": "Expression invalide",
+    "nextRunsTitle": "Prochaines exécutions",
+    "saveCreate": "Créer la tâche",
+    "saveEdit": "Enregistrer"
+  },
+  "run": {
+    "running": "Exécution en cours…",
+    "exitOk": "Succès · code 0",
+    "exitFail": "Échec · code {{code}}",
+    "stdout": "Sortie standard",
+    "stderr": "Sortie d'erreur",
+    "empty": "(aucune sortie)",
+    "envNote": "Exécutée avec l'environnement d'UberCron : le résultat peut différer d'une exécution cron réelle (PATH minimal)."
+  },
+  "diag": {
+    "title": "Diagnostics",
+    "cron": {
+      "crontabAccessible": {
+        "title": "Crontab accessible",
+        "body": "La commande crontab répond normalement."
+      },
+      "crontabInaccessible": {
+        "title": "Crontab inaccessible",
+        "body": "La commande crontab a échoué. Détail ci-dessous."
+      },
+      "fullDiskAccess": {
+        "title": "Accès complet au disque",
+        "body": "Si vos tâches lisent Documents, Bureau ou Téléchargements, ajoutez /usr/sbin/cron dans Réglages Système → Confidentialité et sécurité → Accès complet au disque. Sans cela, macOS bloque silencieusement l'accès à ces dossiers."
+      },
+      "minimalPath": {
+        "title": "PATH minimal",
+        "body": "cron exécute les commandes avec un PATH réduit (/usr/bin:/bin). Utilisez des chemins absolus dans vos commandes, ou définissez PATH= en tête de crontab."
+      }
+    }
+  },
+  "errors": {
+    "notFound": "Tâche introuvable. La liste a peut-être changé : rechargez.",
+    "concurrentModification": "La crontab a été modifiée par un autre programme depuis le chargement. Rechargez la liste puis réessayez.",
+    "parseError": "Ligne de crontab non analysable.",
+    "commandFailed": "Une commande système a échoué.",
+    "permissionDenied": "Permission refusée par le système.",
+    "invalidSpec": "Expression ou commande invalide.",
+    "io": "Erreur d'entrée/sortie.",
+    "notImplemented": "Fonction non disponible dans cette version.",
+    "unknown": "Erreur inattendue."
   }
 }

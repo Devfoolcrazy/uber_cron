@@ -116,9 +116,9 @@ export type LaunchdSchedule = { type: "calendarIntervals"; value: CalendarEntry[
 export type RunResult = 
 /**  cron : exécution directe terminée. */
 { type: "completed"; value: {
-	exit_code: number,
-	stdout_tail: string,
-	stderr_tail: string,
+	exitCode: number,
+	stdoutTail: string,
+	stderrTail: string,
 } } | 
 /**  launchd : kickstart asynchrone — consulter statut/logs. */
 { type: "started" };
