@@ -96,6 +96,15 @@
     "command": "Command",
     "commandPlaceholder": "/usr/local/bin/my-script --option",
     "pathWarning": "cron runs with a minimal PATH: use an absolute path (starting with / or ~).",
+    "workdir": "Working directory",
+    "log": "Output log",
+    "generated": "Line written to the crontab",
+    "hints": {
+      "bareProgram": "\"{{name}}\" may not be found with cron's minimal PATH: use its absolute path (e.g. /usr/bin/{{name}}, or your venv's binary).",
+      "workdirRelative": "The working directory must be an absolute path (starting with / or ~).",
+      "noLog": "Without a log, the task's output is lost — failures cannot be diagnosed.",
+      "addLog": "Add a log"
+    },
     "preview": "Preview",
     "previewInvalid": "Invalid expression",
     "nextRunsTitle": "Upcoming runs",

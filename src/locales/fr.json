@@ -96,6 +96,15 @@
     "command": "Commande",
     "commandPlaceholder": "/usr/local/bin/mon-script --option",
     "pathWarning": "cron exécute avec un PATH minimal : utilisez un chemin absolu (commençant par / ou ~).",
+    "workdir": "Dossier de travail",
+    "log": "Journal de sortie",
+    "generated": "Ligne écrite dans la crontab",
+    "hints": {
+      "bareProgram": "« {{name}} » risque d'être introuvable avec le PATH minimal de cron : utilisez son chemin absolu (ex. /usr/bin/{{name}}, ou le binaire de votre venv).",
+      "workdirRelative": "Le dossier de travail doit être un chemin absolu (commençant par / ou ~).",
+      "noLog": "Sans journal, la sortie de la tâche est perdue — impossible de diagnostiquer un échec.",
+      "addLog": "Ajouter un journal"
+    },
     "preview": "Aperçu",
     "previewInvalid": "Expression invalide",
     "nextRunsTitle": "Prochaines exécutions",

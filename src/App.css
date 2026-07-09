@@ -628,6 +628,28 @@ select:focus {
   margin-top: 8px;
 }
 
+.link-btn.inline {
+  margin: 0;
+  font-size: inherit;
+}
+
+.cmd-extras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.generated-line {
+  display: block;
+  font-size: 11px;
+  color: var(--text-2);
+  background: var(--surface-2);
+  border-radius: 6px;
+  padding: 6px 9px;
+  word-break: break-all;
+  user-select: text;
+}
+
 .cron-help {
   margin-top: 6px;
   padding: 10px 12px;

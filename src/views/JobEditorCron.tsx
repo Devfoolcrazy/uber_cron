@@ -11,6 +11,12 @@ import { formatRun, humanizeCron, isReboot } from "../lib/schedule";
 import { apiErrorMessage } from "../App";
 import CronFieldRow, { type CronFieldKey } from "../components/CronFieldRow";
 import CronHelp from "../components/CronHelp";
+import {
+  composeCommand,
+  decomposeCommand,
+  suggestLogPath,
+  type CommandParts,
+} from "../lib/command";
 
 type Props = {
   backend: BackendKind;
@@ -42,7 +48,9 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
   const [expression, setExpression] = useState(initialExpr);
   const [freeMode, setFreeMode] = useState(splitFields(initialExpr) === null);
   const [name, setName] = useState(job?.name ?? "");
-  const [command, setCommand] = useState(job?.command ?? "");
+  const [cmdParts, setCmdParts] = useState<CommandParts>(() =>
+    decomposeCommand(job?.command ?? ""),
+  );
   const [preview, setPreview] = useState<SchedulePreview | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<ApiError | null>(null);
@@ -72,11 +80,24 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
     setExpression(current.join(" "));
   };
 
-  const commandNeedsAbsolutePath =
-    command.trim() !== "" && !/^[/~]/.test(command.trim());
+  const composed = composeCommand(cmdParts);
+  const setPart = (part: keyof CommandParts) => (value: string) =>
+    setCmdParts((current) => ({ ...current, [part]: value }));
+
+  // Conseils contextuels sur la commande (§11 PATH + journal).
+  const firstToken = cmdParts.program.trim().split(/\s+/)[0] ?? "";
+  const hintBareProgram =
+    firstToken !== "" && !firstToken.includes("/") && !/^[~$]/.test(firstToken);
+  const hintRelativeProgram =
+    firstToken.includes("/") &&
+    !/^[/~$]/.test(firstToken) &&
+    cmdParts.workdir.trim() === "";
+  const hintWorkdirRelative =
+    cmdParts.workdir.trim() !== "" && !/^[/~$]/.test(cmdParts.workdir.trim());
+  const hintNoLog = cmdParts.program.trim() !== "" && cmdParts.log.trim() === "";
 
   const canSave =
-    !saving && command.trim() !== "" && (preview === null || preview.valid);
+    !saving && cmdParts.program.trim() !== "" && (preview === null || preview.valid);
 
   const save = async () => {
     setSaving(true);
@@ -85,7 +106,7 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
       type: "cron" as const,
       value: {
         schedule: expression.trim(),
-        command: command.trim(),
+        command: composed,
         name: name.trim() === "" ? null : name.trim(),
       },
     };
@@ -199,15 +220,69 @@ export default function JobEditorCron({ backend, job, onSaved, onCancel }: Props
             <input
               className="mono"
               type="text"
-              value={command}
-              onChange={(e) => setCommand(e.target.value)}
+              value={cmdParts.program}
+              onChange={(e) => setPart("program")(e.target.value)}
               placeholder={t("editor.commandPlaceholder")}
               spellCheck={false}
             />
           </label>
-          {commandNeedsAbsolutePath && (
-            <p className="hint warning">{t("editor.pathWarning")}</p>
+          {hintBareProgram && (
+            <p className="hint warning">
+              {t("editor.hints.bareProgram", { name: firstToken })}
+            </p>
           )}
+          {hintRelativeProgram && <p className="hint warning">{t("editor.pathWarning")}</p>}
+
+          <div className="cmd-extras">
+            <label className="field">
+              <span className="field-label">
+                {t("editor.workdir")} <em>({t("editor.nameOptional")})</em>
+              </span>
+              <input
+                className="mono"
+                type="text"
+                value={cmdParts.workdir}
+                onChange={(e) => setPart("workdir")(e.target.value)}
+                placeholder="/Users/moi/mon-projet"
+                spellCheck={false}
+              />
+            </label>
+            <label className="field">
+              <span className="field-label">
+                {t("editor.log")} <em>({t("editor.nameOptional")})</em>
+              </span>
+              <input
+                className="mono"
+                type="text"
+                value={cmdParts.log}
+                onChange={(e) => setPart("log")(e.target.value)}
+                placeholder="$HOME/Library/Logs/ubercron-tache.log"
+                spellCheck={false}
+              />
+            </label>
+          </div>
+          {hintWorkdirRelative && (
+            <p className="hint warning">{t("editor.hints.workdirRelative")}</p>
+          )}
+          {hintNoLog && (
+            <p className="hint">
+              {t("editor.hints.noLog")}{" "}
+              <button
+                type="button"
+                className="link-btn inline"
+                onClick={() => setPart("log")(suggestLogPath(name, cmdParts.program))}
+              >
+                {t("editor.hints.addLog")}
+              </button>
+            </p>
+          )}
+          {(cmdParts.workdir.trim() !== "" || cmdParts.log.trim() !== "") &&
+            cmdParts.program.trim() !== "" && (
+              <p className="field">
+                <span className="field-label">{t("editor.generated")}</span>
+                <code className="generated-line">{composed}</code>
+              </p>
+            )}
 
           <div className="editor-actions">
             <button type="button" className="btn" onClick={onCancel}>
