@@ -1,0 +1,20 @@
+{
+  "app": {
+    "title": "UberCron"
+  },
+  "backend": {
+    "cron": "cron",
+    "launchd": "launchd",
+    "launchdComingSoon": "Le backend launchd arrive dans une prochaine version."
+  },
+  "common": {
+    "loading": "Chargement…",
+    "reload": "Recharger",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "confirm": "Confirmer"
+  }
+}
