@@ -1,4 +1,7 @@
+pub mod backend;
 mod commands;
+pub mod model;
+pub mod system;
 
 use tauri_specta::{collect_commands, Builder};
 
