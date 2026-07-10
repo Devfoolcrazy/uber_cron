@@ -9,8 +9,10 @@ import {
 } from "./lib/bindings";
 import JobList from "./views/JobList";
 import JobEditorCron from "./views/JobEditorCron";
+import JobEditorLaunchd from "./views/JobEditorLaunchd";
 import Diagnostics from "./views/Diagnostics";
 import RunResultSheet from "./components/RunResultSheet";
+import LogViewer from "./components/LogViewer";
 import "./App.css";
 
 type View =
@@ -41,6 +43,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ApiError | null>(null);
   const [run, setRun] = useState<RunState | null>(null);
+  const [logsJob, setLogsJob] = useState<Job | null>(null);
 
   const loadJobs = useCallback(async () => {
     setLoading(true);
@@ -56,8 +59,8 @@ function App() {
   }, [backend]);
 
   useEffect(() => {
-    if (backend === "cron") void loadJobs();
-  }, [backend, loadJobs]);
+    void loadJobs();
+  }, [loadJobs]);
 
   const selectBackend = (kind: BackendKind) => {
     localStorage.setItem(BACKEND_KEY, kind);
@@ -112,8 +115,6 @@ function App() {
               role="tab"
               aria-selected={backend === kind}
               className={backend === kind ? "segment active" : "segment"}
-              disabled={kind === "launchd"}
-              title={kind === "launchd" ? t("backend.launchdComingSoon") : undefined}
               onClick={() => selectBackend(kind)}
             >
               {t(`backend.${kind}`)}
@@ -184,20 +185,31 @@ function App() {
             onToggle={handleToggle}
             onDelete={handleDelete}
             onRun={handleRun}
+            onLogs={setLogsJob}
           />
         )}
 
-        {view.kind === "editor" && (
-          <JobEditorCron
-            backend={backend}
-            job={view.job}
-            onSaved={() => {
-              setView({ kind: "list" });
-              void loadJobs();
-            }}
-            onCancel={() => setView({ kind: "list" })}
-          />
-        )}
+        {view.kind === "editor" &&
+          (backend === "cron" ? (
+            <JobEditorCron
+              backend={backend}
+              job={view.job}
+              onSaved={() => {
+                setView({ kind: "list" });
+                void loadJobs();
+              }}
+              onCancel={() => setView({ kind: "list" })}
+            />
+          ) : (
+            <JobEditorLaunchd
+              job={view.job}
+              onSaved={() => {
+                setView({ kind: "list" });
+                void loadJobs();
+              }}
+              onCancel={() => setView({ kind: "list" })}
+            />
+          ))}
 
         {view.kind === "diagnostics" && (
           <Diagnostics backend={backend} onClose={() => setView({ kind: "list" })} />
@@ -205,8 +217,18 @@ function App() {
       </main>
 
       {run && (
-        <RunResultSheet job={run.job} result={run.result} onClose={() => setRun(null)} />
+        <RunResultSheet
+          job={run.job}
+          result={run.result}
+          onClose={() => setRun(null)}
+          onLogs={(job) => {
+            setRun(null);
+            setLogsJob(job);
+          }}
+        />
       )}
+
+      {logsJob && <LogViewer job={logsJob} onClose={() => setLogsJob(null)} />}
     </div>
   );
 }

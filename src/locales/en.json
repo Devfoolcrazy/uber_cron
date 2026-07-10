@@ -25,6 +25,11 @@
     "reload": "Reload list"
   },
   "list": {
+    "filter": {
+      "all": "all",
+      "managed": "managed",
+      "external": "external"
+    },
     "emptyTitle": "No scheduled tasks",
     "emptyBody": "Your crontab is empty. Create your first task: the system's cron will run it even when UberCron is closed.",
     "emptyCta": "Create a task",
@@ -39,14 +44,23 @@
     "noNextRun": "No computable occurrence",
     "atReboot": "At system startup",
     "invalidExpr": "Unrecognized expression",
-    "deleteConfirm": "Delete this task?"
+    "noSchedule": "No schedule (system-driven agent)",
+    "managedTag": "managed",
+    "externalTag": "external",
+    "running": "Running",
+    "lastExit": "Last run: code {{code}}",
+    "notEditable": "This agent has no editable schedule — managed by its application",
+    "runNeedsEnabled": "Enable the task first to run it",
+    "deleteConfirm": "Delete this task?",
+    "deleteExternalConfirm": "External agent (another application) — delete anyway?"
   },
   "actions": {
     "run": "Run now",
     "edit": "Edit",
     "delete": "Delete",
     "enable": "Enable",
-    "disable": "Disable"
+    "disable": "Disable",
+    "logs": "View logs"
   },
   "editor": {
     "titleNew": "New cron task",
@@ -127,7 +141,40 @@
     "previewInvalid": "Invalid expression",
     "nextRunsTitle": "Upcoming runs",
     "saveCreate": "Create task",
-    "saveEdit": "Save"
+    "saveEdit": "Save",
+    "launchd": {
+      "titleNew": "New launchd agent",
+      "titleEdit": "Edit agent",
+      "label": "Identifier (label)",
+      "labelHint": "Convention: com.ubercron.my-name — permanent after creation.",
+      "commandMode": {
+        "shell": "Shell command",
+        "argv": "Program + arguments"
+      },
+      "argvPlaceholder": "/usr/local/bin/program\n--option\nvalue",
+      "argvHint": "One argument per line, no quotes — the first is the program (absolute path).",
+      "scheduleType": {
+        "calendar": "Calendar",
+        "interval": "Interval"
+      },
+      "addEntry": "Add a time",
+      "removeEntry": "Remove this time",
+      "interval": "Every",
+      "unit": {
+        "seconds": "seconds",
+        "minutes": "minutes",
+        "hours": "hours"
+      },
+      "intervalNote": "launchd shifts runs if the Mac sleeps — no predictable absolute dates.",
+      "runAtLoad": "Also run at load (RunAtLoad)",
+      "stdout": "Log (stdout)",
+      "stderr": "Error log (stderr)",
+      "suggestLogs": "Suggest paths",
+      "externalWarning": "External agent: it probably belongs to another application. A backup is created on every save, but edit knowingly.",
+      "killWarning": "This task is currently running: saving will interrupt the process. Confirm to continue.",
+      "confirmKill": "Interrupt and save",
+      "saveCreate": "Create agent"
+    }
   },
   "run": {
     "running": "Running…",
@@ -136,7 +183,16 @@
     "stdout": "Standard output",
     "stderr": "Error output",
     "empty": "(no output)",
-    "envNote": "Executed with UberCron's environment: the result may differ from a real cron run (minimal PATH)."
+    "envNote": "Executed with UberCron's environment: the result may differ from a real cron run (minimal PATH).",
+    "started": "Started",
+    "startedNote": "kickstart sent — launchd runs the task in the background. Check the logs for output."
+  },
+  "logs": {
+    "title": "Logs — {{label}}",
+    "stdout": "Standard output",
+    "stderr": "Error output",
+    "empty": "(empty or not found)",
+    "refresh": "Refresh"
   },
   "diag": {
     "title": "Diagnostics",
@@ -156,6 +212,28 @@
       "minimalPath": {
         "title": "Minimal PATH",
         "body": "cron runs commands with a reduced PATH (/usr/bin:/bin). Use absolute paths in your commands, or set PATH= at the top of your crontab."
+      }
+    },
+    "launchd": {
+      "agentsDirAccessible": {
+        "title": "LaunchAgents folder accessible",
+        "body": "The plists in ~/Library/LaunchAgents are readable."
+      },
+      "agentsDirInaccessible": {
+        "title": "LaunchAgents folder inaccessible",
+        "body": "Cannot read ~/Library/LaunchAgents. Details below."
+      },
+      "unreadablePlists": {
+        "title": "Unreadable plists",
+        "body": "Some files in the LaunchAgents folder are not valid plists. They are ignored (and never modified)."
+      },
+      "launchctlResponds": {
+        "title": "launchctl responds",
+        "body": "Your session's gui domain responds normally."
+      },
+      "launchctlFails": {
+        "title": "launchctl not responding",
+        "body": "launchctl commands are failing. Details below."
       }
     }
   },

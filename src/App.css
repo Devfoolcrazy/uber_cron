@@ -245,6 +245,11 @@ pre,
   color: var(--danger);
 }
 
+.banner.warning-banner {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+
 .hint {
   font-size: 11.5px;
   color: var(--text-2);
@@ -306,6 +311,50 @@ pre,
 .status-dot.on {
   background: var(--ok);
   opacity: 1;
+}
+
+.status-dot.running {
+  background: var(--accent);
+  opacity: 1;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* Badges de ligne : géré/externe, dernier exit code. */
+.tag {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 999px;
+  vertical-align: 1px;
+}
+
+.tag.managed {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.tag.external {
+  color: var(--text-2);
+  background: var(--surface-2);
+}
+
+.tag.exit-ok {
+  color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 12%, transparent);
+}
+
+.tag.exit-fail {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .job-main {
@@ -755,6 +804,95 @@ select:focus {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+/* ---------- Éditeur launchd ---------- */
+
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.entry-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+  gap: 6px;
+  align-items: start;
+}
+
+.cron-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cron-field span {
+  font-size: 10.5px;
+  color: var(--text-2);
+  text-align: center;
+}
+
+.argv-input {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  resize: vertical;
+  user-select: text;
+}
+
+.argv-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+.interval-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.interval-value {
+  width: 80px;
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.interval-row select {
+  width: auto;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.log-path {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-2);
+  margin-left: 6px;
+  user-select: text;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .editor-actions {

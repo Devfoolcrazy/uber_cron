@@ -7,6 +7,11 @@ import { invoke as __TAURI_INVOKE } from "@tauri-apps/api/core";
 /** Commands */
 export const commands = {
 	appVersion: () => __TAURI_INVOKE<string>("app_version"),
+	/**
+	 *  Dossier personnel absolu — les chemins des plists launchd ne passent pas
+	 *  par un shell, donc pas de $HOME/~ possible dans les suggestions.
+	 */
+	homeDir: () => __TAURI_INVOKE<string>("home_dir"),
 	listJobs: (backend: BackendKind) => typedError<Job[], ApiError>(__TAURI_INVOKE("list_jobs", { backend })),
 	getJob: (backend: BackendKind, id: string) => typedError<Job, ApiError>(__TAURI_INVOKE("get_job", { backend, id })),
 	createJob: (backend: BackendKind, spec: JobSpec) => typedError<string, ApiError>(__TAURI_INVOKE("create_job", { backend, spec })),

@@ -36,6 +36,17 @@ pub fn app_version() -> String {
     env!("CARGO_PKG_VERSION").to_string()
 }
 
+/// Dossier personnel absolu — les chemins des plists launchd ne passent pas
+/// par un shell, donc pas de $HOME/~ possible dans les suggestions.
+#[tauri::command]
+#[specta::specta]
+pub fn home_dir() -> String {
+    dirs::home_dir()
+        .unwrap_or_default()
+        .to_string_lossy()
+        .into_owned()
+}
+
 #[tauri::command]
 #[specta::specta]
 pub async fn list_jobs(

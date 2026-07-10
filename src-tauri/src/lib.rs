@@ -15,6 +15,7 @@ use system::RealSystem;
 fn specta_builder() -> Builder<tauri::Wry> {
     Builder::<tauri::Wry>::new().commands(collect_commands![
         commands::app_version,
+        commands::home_dir,
         commands::list_jobs,
         commands::get_job,
         commands::create_job,

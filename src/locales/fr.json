@@ -25,6 +25,11 @@
     "reload": "Recharger la liste"
   },
   "list": {
+    "filter": {
+      "all": "tous",
+      "managed": "gérés",
+      "external": "externes"
+    },
     "emptyTitle": "Aucune tâche planifiée",
     "emptyBody": "Votre crontab est vide. Créez votre première tâche : elle sera exécutée par le cron du système, même quand UberCron est fermé.",
     "emptyCta": "Créer une tâche",
@@ -39,14 +44,23 @@
     "noNextRun": "Pas d'occurrence calculable",
     "atReboot": "Au démarrage du système",
     "invalidExpr": "Expression non reconnue",
-    "deleteConfirm": "Supprimer cette tâche ?"
+    "noSchedule": "Pas de planification (agent piloté par le système)",
+    "managedTag": "géré",
+    "externalTag": "externe",
+    "running": "En cours d'exécution",
+    "lastExit": "Dernière exécution : code {{code}}",
+    "notEditable": "Cet agent n'a pas de planification éditable — géré par son application",
+    "runNeedsEnabled": "Activez d'abord la tâche pour pouvoir l'exécuter",
+    "deleteConfirm": "Supprimer cette tâche ?",
+    "deleteExternalConfirm": "Agent externe (autre application) — supprimer quand même ?"
   },
   "actions": {
     "run": "Exécuter maintenant",
     "edit": "Modifier",
     "delete": "Supprimer",
     "enable": "Activer",
-    "disable": "Désactiver"
+    "disable": "Désactiver",
+    "logs": "Voir les journaux"
   },
   "editor": {
     "titleNew": "Nouvelle tâche cron",
@@ -127,7 +141,40 @@
     "previewInvalid": "Expression invalide",
     "nextRunsTitle": "Prochaines exécutions",
     "saveCreate": "Créer la tâche",
-    "saveEdit": "Enregistrer"
+    "saveEdit": "Enregistrer",
+    "launchd": {
+      "titleNew": "Nouvel agent launchd",
+      "titleEdit": "Modifier l'agent",
+      "label": "Identifiant (label)",
+      "labelHint": "Convention : com.ubercron.mon-nom — définitif après création.",
+      "commandMode": {
+        "shell": "Commande shell",
+        "argv": "Programme + arguments"
+      },
+      "argvPlaceholder": "/usr/local/bin/programme\n--option\nvaleur",
+      "argvHint": "Un argument par ligne, sans quotes — le premier est le programme (chemin absolu).",
+      "scheduleType": {
+        "calendar": "Calendrier",
+        "interval": "Intervalle"
+      },
+      "addEntry": "Ajouter un horaire",
+      "removeEntry": "Retirer cet horaire",
+      "interval": "Toutes les",
+      "unit": {
+        "seconds": "secondes",
+        "minutes": "minutes",
+        "hours": "heures"
+      },
+      "intervalNote": "launchd décale les exécutions si le Mac dort — pas de dates absolues prévisibles.",
+      "runAtLoad": "Exécuter aussi au chargement (RunAtLoad)",
+      "stdout": "Journal (stdout)",
+      "stderr": "Journal d'erreurs (stderr)",
+      "suggestLogs": "Proposer des chemins",
+      "externalWarning": "Agent externe : il appartient probablement à une autre application. Un backup est créé à chaque enregistrement, mais modifiez-le en connaissance de cause.",
+      "killWarning": "Cette tâche est en cours d'exécution : enregistrer va interrompre le process. Confirmez pour continuer.",
+      "confirmKill": "Interrompre et enregistrer",
+      "saveCreate": "Créer l'agent"
+    }
   },
   "run": {
     "running": "Exécution en cours…",
@@ -136,7 +183,16 @@
     "stdout": "Sortie standard",
     "stderr": "Sortie d'erreur",
     "empty": "(aucune sortie)",
-    "envNote": "Exécutée avec l'environnement d'UberCron : le résultat peut différer d'une exécution cron réelle (PATH minimal)."
+    "envNote": "Exécutée avec l'environnement d'UberCron : le résultat peut différer d'une exécution cron réelle (PATH minimal).",
+    "started": "Lancée",
+    "startedNote": "kickstart envoyé — launchd exécute la tâche en arrière-plan. Consultez les journaux pour la sortie."
+  },
+  "logs": {
+    "title": "Journaux — {{label}}",
+    "stdout": "Sortie standard",
+    "stderr": "Sortie d'erreur",
+    "empty": "(vide ou introuvable)",
+    "refresh": "Rafraîchir"
   },
   "diag": {
     "title": "Diagnostics",
@@ -156,6 +212,28 @@
       "minimalPath": {
         "title": "PATH minimal",
         "body": "cron exécute les commandes avec un PATH réduit (/usr/bin:/bin). Utilisez des chemins absolus dans vos commandes, ou définissez PATH= en tête de crontab."
+      }
+    },
+    "launchd": {
+      "agentsDirAccessible": {
+        "title": "Dossier LaunchAgents accessible",
+        "body": "Les plists de ~/Library/LaunchAgents sont lisibles."
+      },
+      "agentsDirInaccessible": {
+        "title": "Dossier LaunchAgents inaccessible",
+        "body": "Impossible de lire ~/Library/LaunchAgents. Détail ci-dessous."
+      },
+      "unreadablePlists": {
+        "title": "Plists illisibles",
+        "body": "Certains fichiers du dossier LaunchAgents ne sont pas des plists valides. Ils sont ignorés (et jamais modifiés)."
+      },
+      "launchctlResponds": {
+        "title": "launchctl répond",
+        "body": "Le domaine gui de votre session répond normalement."
+      },
+      "launchctlFails": {
+        "title": "launchctl ne répond pas",
+        "body": "Les commandes launchctl échouent. Détail ci-dessous."
       }
     }
   },
