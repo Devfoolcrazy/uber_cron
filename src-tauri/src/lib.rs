@@ -8,6 +8,7 @@ use std::sync::Arc;
 use tauri_specta::{collect_commands, Builder};
 
 use backend::cron::backend::CronBackend;
+use backend::launchd::backend::LaunchdBackend;
 use commands::AppState;
 use system::RealSystem;
 
@@ -23,16 +24,30 @@ fn specta_builder() -> Builder<tauri::Wry> {
         commands::run_job,
         commands::run_diagnostics,
         commands::preview_schedule,
+        commands::read_log_tail,
     ])
 }
 
 fn app_state() -> AppState {
-    let backups_dir = dirs::data_dir()
+    let system: Arc<RealSystem> = Arc::new(RealSystem);
+    let data_dir = dirs::data_dir()
         .unwrap_or_else(std::env::temp_dir)
-        .join("UberCron")
-        .join("backups");
+        .join("UberCron");
+    let agents_dir = dirs::home_dir()
+        .unwrap_or_else(std::env::temp_dir)
+        .join("Library")
+        .join("LaunchAgents");
+    // SAFETY : getuid ne peut pas échouer.
+    let uid = unsafe { libc::getuid() };
     AppState {
-        cron: Arc::new(CronBackend::new(Arc::new(RealSystem), backups_dir)),
+        cron: Arc::new(CronBackend::new(system.clone(), data_dir.join("backups"))),
+        launchd: Arc::new(LaunchdBackend::new(
+            system,
+            agents_dir,
+            data_dir.join("backups").join("launchd"),
+            data_dir.join("trash"),
+            uid,
+        )),
     }
 }
 

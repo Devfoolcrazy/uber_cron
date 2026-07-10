@@ -1,6 +1,7 @@
 //! Trait SchedulerBackend + erreurs typées (§4).
 
 pub mod cron;
+pub mod launchd;
 
 use serde::Serialize;
 use specta::Type;

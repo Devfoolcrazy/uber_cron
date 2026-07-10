@@ -164,6 +164,7 @@ impl CronBackend {
             status: JobStatus::Static,
             last_exit_code: None,
             managed: true,
+            launchd_spec: None,
         })
     }
 

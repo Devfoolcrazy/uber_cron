@@ -4155,6 +4155,7 @@ dependencies = [
  "croner",
  "dirs",
  "libc",
+ "plist",
  "serde",
  "serde_json",
  "sha2 0.11.0",

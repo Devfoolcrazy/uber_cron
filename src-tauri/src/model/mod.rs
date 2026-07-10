@@ -50,6 +50,8 @@ pub enum ScheduleInfo {
     CalendarIntervals(Vec<CalendarEntry>),
     /// StartInterval en secondes.
     Interval(u32),
+    /// launchd sans schedule (KeepAlive, WatchPaths...) — DECISIONS 2026-07-10.
+    None,
 }
 
 /// Modèle commun en lecture (§3.1).
@@ -73,6 +75,11 @@ pub struct Job {
     pub last_exit_code: Option<i32>,
     /// launchd : label préfixé com.ubercron. — cron : toujours true (§3.1).
     pub managed: bool,
+    /// launchd : spec reconstruite pour l'éditeur et la visionneuse de logs.
+    /// None pour cron, et pour les agents sans schedule (non éditables via le
+    /// formulaire — on ne donne pas accidentellement un schedule à un daemon
+    /// KeepAlive).
+    pub launchd_spec: Option<LaunchdJobSpec>,
 }
 
 /// Spécification d'édition, par backend — PAS de formulaire unifié (§3.3).

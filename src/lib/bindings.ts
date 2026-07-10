@@ -20,6 +20,12 @@ export const commands = {
 	runJob: (backend: BackendKind, id: string) => typedError<RunResult, ApiError>(__TAURI_INVOKE("run_job", { backend, id })),
 	runDiagnostics: (backend: BackendKind) => typedError<Diagnostic[], ApiError>(__TAURI_INVOKE("run_diagnostics", { backend })),
 	previewSchedule: (schedule: ScheduleInfo) => __TAURI_INVOKE<SchedulePreview>("preview_schedule", { schedule }),
+	/**
+	 *  Visionneuse de logs (§8.1) : dernières lignes d'un fichier de log
+	 *  launchd (tail simple, pas de suivi live au MVP). `$HOME` accepté en tête
+	 *  de chemin (convention des suggestions de journal).
+	 */
+	readLogTail: (path: string) => typedError<string, ApiError>(__TAURI_INVOKE("read_log_tail", { path })),
 };
 
 /* Types */
@@ -84,6 +90,13 @@ export type Job = {
 	lastExitCode: number | null,
 	/**  launchd : label préfixé com.ubercron. — cron : toujours true (§3.1). */
 	managed: boolean,
+	/**
+	 *  launchd : spec reconstruite pour l'éditeur et la visionneuse de logs.
+	 *  None pour cron, et pour les agents sans schedule (non éditables via le
+	 *  formulaire — on ne donne pas accidentellement un schedule à un daemon
+	 *  KeepAlive).
+	 */
+	launchdSpec: LaunchdJobSpec | null,
 };
 
 /**  Spécification d'édition, par backend — PAS de formulaire unifié (§3.3). */
@@ -131,7 +144,9 @@ export type ScheduleInfo =
 /**  Expression 5 champs ou @-raccourci (@daily, @reboot...). */
 { type: "cronExpr"; value: string } | { type: "calendarIntervals"; value: CalendarEntry[] } | 
 /**  StartInterval en secondes. */
-{ type: "interval"; value: number };
+{ type: "interval"; value: number } | 
+/**  launchd sans schedule (KeepAlive, WatchPaths...) — DECISIONS 2026-07-10. */
+{ type: "none" };
 
 /**
  *  Aperçu live du formulaire (§7). La phrase humaine est calculée côté frontend ;
