@@ -27,6 +27,16 @@ Ces sorties servent de fixtures aux mocks des tests.
   No such process` → à tolérer dans delete/disable.
 - `kickstart` sur service non chargé : exit 113, `Could not find service`.
 
+## 2026-07-10 — `WorkingDirectory` ajouté aux clés gérées launchd (§6.3)
+
+**Décision** : l'éditeur launchd expose « Dossier de travail » (clé native
+`WorkingDirectory`) et reprend les conseils anti-pièges de l'éditeur cron
+(binaire nu, chemin relatif, dossier relatif).
+**Raison** : premier job launchd créé en usage réel → l'utilisateur a écrit
+`/chemin/projet/make crawl` (le chemin du projet collé au binaire) faute de
+champ dossier de travail. Le formulaire cron prévient ce piège depuis le
+départ ; launchd doit faire pareil — d'autant que launchd a une clé native.
+
 ## 2026-07-10 — `ScheduleInfo::None` ajouté au modèle
 
 **Décision** : un agent launchd sans `StartCalendarInterval` ni `StartInterval`

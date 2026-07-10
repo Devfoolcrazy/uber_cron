@@ -127,6 +127,8 @@ export type LaunchdJobSpec = {
 	command: LaunchdCommand,
 	schedule: LaunchdSchedule,
 	runAtLoad: boolean,
+	/**  Clé native WorkingDirectory — équivalent launchd du `cd` (§6.3). */
+	workingDirectory: string | null,
 	stdoutPath: string | null,
 	stderrPath: string | null,
 };

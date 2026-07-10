@@ -94,6 +94,7 @@ export default function JobEditorLaunchd({ job, onSaved, onCancel }: Props) {
   );
   const [interval, setInterval] = useState(initialInterval(spec));
   const [runAtLoad, setRunAtLoad] = useState(spec?.runAtLoad ?? false);
+  const [workdir, setWorkdir] = useState(spec?.workingDirectory ?? "");
   const [stdoutPath, setStdoutPath] = useState(spec?.stdoutPath ?? "");
   const [stderrPath, setStderrPath] = useState(spec?.stderrPath ?? "");
   const [home, setHome] = useState("");
@@ -132,6 +133,15 @@ export default function JobEditorLaunchd({ job, onSaved, onCancel }: Props) {
     .map((s) => s.trim())
     .filter((s) => s !== "");
   const commandValid = cmdMode === "shell" ? shellCmd.trim() !== "" : argv.length > 0;
+
+  // Conseils anti-pièges, identiques à l'éditeur cron (§11 PATH).
+  const firstToken =
+    cmdMode === "shell" ? (shellCmd.trim().split(/\s+/)[0] ?? "") : (argv[0] ?? "");
+  const hintBareProgram =
+    firstToken !== "" && !firstToken.includes("/") && !firstToken.startsWith("~");
+  const hintRelativeProgram =
+    firstToken.includes("/") && !/^[/~]/.test(firstToken) && workdir.trim() === "";
+  const hintWorkdirRelative = workdir.trim() !== "" && !/^[/~]/.test(workdir.trim());
   const scheduleValid =
     schedType === "calendar" ? entries.length > 0 : intervalSecs > 0;
 
@@ -166,6 +176,7 @@ export default function JobEditorLaunchd({ job, onSaved, onCancel }: Props) {
           ? { type: "calendarIntervals", value: entries }
           : { type: "interval", value: intervalSecs },
       runAtLoad,
+      workingDirectory: workdir.trim() === "" ? null : workdir.trim(),
       stdoutPath: stdoutPath.trim() === "" ? null : stdoutPath.trim(),
       stderrPath: stderrPath.trim() === "" ? null : stderrPath.trim(),
     };
@@ -256,6 +267,29 @@ export default function JobEditorLaunchd({ job, onSaved, onCancel }: Props) {
                 />
                 <span className="hint">{t("editor.launchd.argvHint")}</span>
               </>
+            )}
+            {hintBareProgram && (
+              <p className="hint warning">
+                {t("editor.hints.bareProgram", { name: firstToken })}
+              </p>
+            )}
+            {hintRelativeProgram && <p className="hint warning">{t("editor.pathWarning")}</p>}
+
+            <label className="field workdir-field">
+              <span className="field-label">
+                {t("editor.workdir")} <em>({t("editor.nameOptional")})</em>
+              </span>
+              <input
+                className="mono"
+                type="text"
+                value={workdir}
+                onChange={(e) => setWorkdir(e.target.value)}
+                placeholder="/Users/moi/mon-projet"
+                spellCheck={false}
+              />
+            </label>
+            {hintWorkdirRelative && (
+              <p className="hint warning">{t("editor.hints.workdirRelative")}</p>
             )}
           </fieldset>
 

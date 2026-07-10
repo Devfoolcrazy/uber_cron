@@ -307,6 +307,7 @@ fn spec_of(dict: &plist::Dictionary, label: &str, schedule: &ScheduleInfo) -> Op
             .get("RunAtLoad")
             .and_then(|v| v.as_boolean())
             .unwrap_or(false),
+        working_directory: path_of("WorkingDirectory"),
         stdout_path: path_of("StandardOutPath"),
         stderr_path: path_of("StandardErrorPath"),
     })
@@ -376,6 +377,7 @@ fn apply_spec(dict: &mut plist::Dictionary, spec: &LaunchdJobSpec) {
     }
 
     for (key, value) in [
+        ("WorkingDirectory", &spec.working_directory),
         ("StandardOutPath", &spec.stdout_path),
         ("StandardErrorPath", &spec.stderr_path),
     ] {
@@ -680,6 +682,7 @@ mod tests {
                 month: None,
             }]),
             run_at_load: false,
+            working_directory: None,
             stdout_path: Some("/tmp/tache.log".to_string()),
             stderr_path: None,
         })

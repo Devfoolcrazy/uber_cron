@@ -122,6 +122,8 @@ pub struct LaunchdJobSpec {
     pub command: LaunchdCommand,
     pub schedule: LaunchdSchedule,
     pub run_at_load: bool,
+    /// Clé native WorkingDirectory — équivalent launchd du `cd` (§6.3).
+    pub working_directory: Option<String>,
     pub stdout_path: Option<String>,
     pub stderr_path: Option<String>,
 }

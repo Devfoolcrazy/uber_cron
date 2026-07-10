@@ -247,7 +247,8 @@ Les **fichiers plist** (crate `plist`, format XML). `launchctl` sert uniquement 
 en argv OU un mode "wrapper shell" `["/bin/sh", "-c", cmd]`, au choix de l'utilisateur ;
 défaut : wrapper shell, plus proche du comportement cron), `StartCalendarInterval` (dict ou
 array de dicts : Minute, Hour, Day, Weekday, Month), `StartInterval`, `RunAtLoad`,
-`StandardOutPath`, `StandardErrorPath`, `Disabled`.
+`WorkingDirectory` (ajout 2026-07-10, voir DECISIONS.md), `StandardOutPath`,
+`StandardErrorPath`, `Disabled`.
 
 **Préservation** : un plist peut contenir des clés qu'on ne gère pas (`KeepAlive`,
 `EnvironmentVariables`, ...). On les préserve intégralement au round-trip : lecture en
