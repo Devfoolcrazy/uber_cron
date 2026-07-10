@@ -2,6 +2,39 @@
 
 > Créé au premier écart, comme prévu par le plan.
 
+## 2026-07-10 — Spike launchd (étape 7) : sorties brutes observées
+
+Agent jetable `com.ubercron.spike` (StartInterval 86400, `exit 3`), Darwin 25.5.0.
+Ces sorties servent de fixtures aux mocks des tests.
+
+- `launchctl print gui/$UID/<label>` (service chargé, exit 0) — extraits :
+  `state = not running` puis après kickstart `last exit code = 3` ;
+  avant première exécution : `last exit code = (never exited)`.
+  **Piège** : des lignes `state = active` apparaissent aussi dans des
+  sous-sections plus indentées → ne parser que la PREMIÈRE occurrence.
+- `launchctl print` sur service NON chargé : exit **113**,
+  stderr `Could not find service "…" in domain for user gui: 501`.
+  → test de chargement fiable : exit 0 vs 113.
+- `launchctl disable gui/$UID/<label>` puis `bootstrap` :
+  **`Bootstrap failed: 5: Input/output error`** (exit 5) — erreur trompeuse,
+  aucune mention de désactivation. Confirme §6.5 : toujours `enable` avant
+  `bootstrap`.
+- `launchctl print-disabled gui/$UID` : format `"label" => disabled`.
+  Après `enable`, l'entrée RESTE dans la DB en `"label" => enabled`
+  (elle ne disparaît pas) → ne considérer désactivé que `=> disabled`
+  (ou `=> true`, format historique).
+- Double `bootout` : le second échoue exit **3**, `Boot-out failed: 3:
+  No such process` → à tolérer dans delete/disable.
+- `kickstart` sur service non chargé : exit 113, `Could not find service`.
+
+## 2026-07-10 — `ScheduleInfo::None` ajouté au modèle
+
+**Décision** : un agent launchd sans `StartCalendarInterval` ni `StartInterval`
+(KeepAlive, WatchPaths, MachServices…) porte `ScheduleInfo::None`.
+**Raison** : le modèle §3.1 suppose un schedule toujours présent ; c'est faux
+pour une grande partie des agents tiers. L'UI affiche « — » et ces agents
+restent visibles (et préservés) sans occurrences.
+
 ## 2026-07-09 — `Job.next_runs` : `Vec<String>` RFC3339 au lieu de `Vec<DateTime>`
 
 **Décision** : les occurrences transitent par l'IPC en chaînes RFC3339 (offset local),
