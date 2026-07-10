@@ -4,8 +4,7 @@
   },
   "backend": {
     "cron": "cron",
-    "launchd": "launchd",
-    "launchdComingSoon": "The launchd backend is coming in a future version."
+    "launchd": "launchd"
   },
   "common": {
     "loading": "Loading…",
